@@ -64,6 +64,10 @@ public class Main {
             return newTodo;
         });
 
+        put("/todos/toggleAll", (request, response) -> {
+            return "Should be implemented";
+        });
+
         put("/todos/:id", (request, response) -> {
             String id = request.params(":id");
             DBObject body = (DBObject) JSON.parse(request.body());
@@ -85,9 +89,14 @@ public class Main {
             );
         });
 
+        delete("/todos/clearCompleted", (request, response) -> {
+            return "Should be implemented";
+        });
+
         delete("/todos/:id", (request, response) -> {
             String id = request.params(":id");
             return collection.deleteOne(new Document("_id", new ObjectId(id)));
         });
+
     }
 }
