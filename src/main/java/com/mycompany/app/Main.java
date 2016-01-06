@@ -15,8 +15,10 @@ import com.mongodb.MongoClientURI;
 import com.mongodb.DBObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.lang.String;
+import java.lang.Boolean;
 
 public class Main {
     public static void main(String[] args) {
@@ -85,7 +87,12 @@ public class Main {
         });
 
         put("/todos/toggleAll", (request, response) -> {
-            return "Should be implemented";
+            String checked = request.queryParams("checked");
+            Document update = new Document().append("completed", Boolean.parseBoolean(checked));
+            return collection.updateMany(
+                new Document("completed", new Document("$in", Arrays.asList(true, false))),
+                new Document("$set", update)
+            );
         });
 
         put("/todos/:id", (request, response) -> {
@@ -110,7 +117,7 @@ public class Main {
         });
 
         delete("/todos/clearCompleted", (request, response) -> {
-            return "Should be implemented";
+            return collection.deleteMany(new Document("completed", true));
         });
 
         delete("/todos/:id", (request, response) -> {
