@@ -58,7 +58,7 @@ var app = app || {};
 	};
 
 	app.TodoModel.prototype.toggleAll = function (checked) {
-		this.spark('PUT', `/toggleAll/?checked=${checked}`);
+		this.spark('PUT', `/toggleAll?checked=${checked}`);
 	};
 
 	app.TodoModel.prototype.toggle = function (todoToToggle) {
