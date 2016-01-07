@@ -29,6 +29,18 @@ var app = app || {};
 		}.bind(this));
 	};
 
+	app.TodoModel.prototype.spark = function(method, path, data) {
+		$('.todoapp').loadingOverlay();
+		$.ajax({
+			method: method,
+			contentType: 'application/json',
+			url: `https://spark-server-with-mongo.herokuapp.com/todos${path}`,
+			data: JSON.stringify(data)
+		}).done(function(response, code) {
+			this.updateTodoList()
+		}.bind(this));
+	};
+
 	app.TodoModel.prototype.subscribe = function (onChange) {
 		this.onChanges.push(onChange);
 	};
@@ -39,17 +51,9 @@ var app = app || {};
 	};
 
 	app.TodoModel.prototype.addTodo = function (title) {
-		$('.todoapp').loadingOverlay();
-		$.ajax({
-			method: 'POST',
-			contentType: 'application/json',
-			url: 'https://spark-server-with-mongo.herokuapp.com/todos',
-			data: JSON.stringify({
-				title: title
-			})
-		}).done(function(response, code) {
-			this.updateTodoList()
-		}.bind(this));
+		this.spark('POST', '', {
+			title: title
+		});
 	};
 
 	app.TodoModel.prototype.toggleAll = function (checked) {
@@ -65,42 +69,19 @@ var app = app || {};
 	};
 
 	app.TodoModel.prototype.toggle = function (todoToToggle) {
-		$('.todoapp').loadingOverlay();
-		$.ajax({
-			method: 'PUT',
-			contentType: 'application/json',
-			url: `https://spark-server-with-mongo.herokuapp.com/todos/${todoToToggle._id.$oid}`,
-			data: JSON.stringify({
-				completed: !todoToToggle.completed
-			})
-		}).done(function(response, code) {
-			this.updateTodoList()
-		}.bind(this));
+		this.spark('PUT', `/${todoToToggle._id.$oid}`, {
+			completed: !todoToToggle.completed
+		});
 	};
 
 	app.TodoModel.prototype.destroy = function (todo) {
-		$('.todoapp').loadingOverlay();
-		$.ajax({
-			method: 'DELETE',
-			contentType: 'application/json',
-			url: `https://spark-server-with-mongo.herokuapp.com/todos/${todo._id.$oid}`
-		}).done(function(response, code) {
-			this.updateTodoList()
-		}.bind(this));
+		this.spark('DELETE', `/${todo._id.$oid}`);
 	};
 
 	app.TodoModel.prototype.save = function (todoToSave, text) {
-		$('.todoapp').loadingOverlay();
-		$.ajax({
-			method: 'PUT',
-			contentType: 'application/json',
-			url: `https://spark-server-with-mongo.herokuapp.com/todos/${todoToSave._id.$oid}`,
-			data: JSON.stringify({
-				title: text
-			})
-		}).done(function(response, code) {
-			this.updateTodoList()
-		}.bind(this));
+		this.spark('PUT', `/${todoToSave._id.$oid}`, {
+			title: text
+		});
 	};
 
 	app.TodoModel.prototype.clearCompleted = function () {
