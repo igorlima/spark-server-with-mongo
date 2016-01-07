@@ -21,6 +21,7 @@ var app = app || {};
 	};
 
 	app.TodoModel.prototype.updateTodoList = function() {
+		$('.todoapp').loadingOverlay();
 		$.getJSON('https://spark-server-with-mongo.herokuapp.com/todos')
 		.done(function(response, code) {
 			this.todos = response || [];
@@ -57,15 +58,7 @@ var app = app || {};
 	};
 
 	app.TodoModel.prototype.toggleAll = function (checked) {
-		this.graphql(`
-			mutation {
-				toggleAll (checked: ${checked}) {
-					id,
-					title,
-					completed
-				}
-			}
-		`);
+		this.spark('PUT', `/toggleAll/?checked=${checked}`);
 	};
 
 	app.TodoModel.prototype.toggle = function (todoToToggle) {
@@ -85,15 +78,7 @@ var app = app || {};
 	};
 
 	app.TodoModel.prototype.clearCompleted = function () {
-		this.graphql(`
-			mutation {
-				clearCompleted {
-					id,
-					title,
-					completed
-				}
-			}
-		`);
+		this.spark('DELETE', '/clearCompleted');
 	};
 
 })();
