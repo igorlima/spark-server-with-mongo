@@ -53,11 +53,8 @@ public class Main {
         get("/todos", (request, response) -> {
             List<DBObject> todos = new ArrayList<DBObject>();
             FindIterable<Document> iterable = collection.find();
-            iterable.forEach(new Block<Document>() {
-                @Override
-                public void apply(final Document document) {
-                    todos.add((DBObject) JSON.parse(document.toJson()));
-                }
+            iterable.forEach( (Block<Document>) (final Document document) -> {
+                todos.add((DBObject) JSON.parse(document.toJson()));
             });
             return todos;
         });
