@@ -22,9 +22,9 @@ import java.lang.Boolean;
 
 public class Main {
     public static void main(String[] args) {
-        MongoClientURI uri = new MongoClientURI("mongodb://example:example@candidate.54.mongolayer.com:10775,candidate.57.mongolayer.com:10128/spark-server-with-mongo?replicaSet=set-5647f7c9cd9e2855e00007fb");
+        MongoClientURI uri = new MongoClientURI("mongodb://example:example@ds047355.mongolab.com:47355/todo-list-graphql");
         MongoClient mongoClient = new MongoClient(uri);
-        MongoDatabase db = mongoClient.getDatabase("spark-server-with-mongo");
+        MongoDatabase db = mongoClient.getDatabase("todo-list-graphql");
         MongoCollection<Document> collection = db.getCollection("todos");
 
         String ENV_PORT = System.getenv().get("PORT");
